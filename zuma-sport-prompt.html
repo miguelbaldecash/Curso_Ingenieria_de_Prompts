@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zuma Sport · Radar de Tendencias — Prompt Maestro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,700;9..144,900&family=JetBrains+Mono:wght@400;500&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0e0c;
+    --paper: #f5f1ea;
+    --paper-warm: #ede6d8;
+    --accent: #e85c1f;
+    --accent-deep: #b83d0a;
+    --muted: #76716a;
+    --line: rgba(15, 14, 12, 0.12);
+    --line-strong: rgba(15, 14, 12, 0.35);
+    --green: #2d6b3f;
+    --amber: #b8820a;
+    --red: #b83d2a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter Tight', system-ui, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.55;
+    font-size: 16px;
+    overflow-x: hidden;
+  }
+
+  ::selection { background: var(--accent); color: var(--paper); }
+
+  /* === GRID NOISE BG === */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle at 25% 25%, rgba(232, 92, 31, 0.04) 0%, transparent 50%),
+                      radial-gradient(circle at 75% 75%, rgba(45, 107, 63, 0.03) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  main { position: relative; z-index: 1; }
+
+  /* === NAV === */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 40px;
+    background: rgba(245, 241, 234, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 0.5px solid var(--line);
+  }
+
+  .logo {
+    font-family: 'Fraunces', serif;
+    font-weight: 900;
+    font-size: 20px;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .logo-mark {
+    width: 22px;
+    height: 22px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .logo-mark::after {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    border: 1.5px solid var(--paper);
+    border-radius: 50%;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .nav-links a {
+    color: var(--ink);
+    text-decoration: none;
+    position: relative;
+    padding: 2px 0;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--accent);
+    transition: width 0.3s;
+  }
+
+  .nav-links a:hover::after { width: 100%; }
+
+  @media (max-width: 720px) {
+    nav { padding: 14px 20px; }
+    .nav-links { display: none; }
+  }
+
+  /* === HERO === */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 120px 40px 80px;
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .eyebrow::before {
+    content: '';
+    width: 32px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  h1.hero-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(48px, 9vw, 128px);
+    line-height: 0.95;
+    letter-spacing: -0.035em;
+    margin-bottom: 40px;
+    max-width: 1100px;
+  }
+
+  h1.hero-title em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--accent);
+  }
+
+  h1.hero-title strong {
+    font-weight: 900;
+  }
+
+  .hero-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 40px;
+    margin-top: 60px;
+    padding-top: 32px;
+    border-top: 0.5px solid var(--line);
+    max-width: 900px;
+  }
+
+  .hero-meta-item {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .hero-meta-item strong {
+    display: block;
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    text-transform: none;
+    margin-top: 4px;
+  }
+
+  .scroll-indicator {
+    position: absolute;
+    bottom: 40px;
+    left: 40px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .scroll-indicator::before {
+    content: '↓';
+    animation: bounce 2s infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+
+  /* === SECTION STRUCTURE === */
+  section {
+    padding: 120px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .section-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    margin-bottom: 24px;
+  }
+
+  h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 48px;
+    max-width: 900px;
+  }
+
+  h2 em {
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 26px;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    margin-bottom: 14px;
+  }
+
+  .lead {
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1.45;
+    color: var(--ink);
+    max-width: 740px;
+    margin-bottom: 60px;
+  }
+
+  p { margin-bottom: 1em; }
+  p:last-child { margin-bottom: 0; }
+
+  @media (max-width: 720px) {
+    section { padding: 80px 24px; }
+    .hero { padding: 100px 24px 60px; }
+    .scroll-indicator { left: 24px; }
+  }
+
+  /* === QUE ES === */
+  #que-es .content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  @media (max-width: 900px) {
+    #que-es .content-grid { grid-template-columns: 1fr; gap: 40px; }
+  }
+
+  .stat-block {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 48px 40px;
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-block::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 120px; height: 120px;
+    background: var(--accent);
+    border-radius: 0 0 0 120px;
+    opacity: 0.15;
+  }
+
+  .stat-item {
+    padding: 20px 0;
+    border-bottom: 0.5px solid rgba(245, 241, 234, 0.15);
+  }
+
+  .stat-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .stat-item:first-child { padding-top: 0; }
+
+  .stat-number {
+    font-family: 'Fraunces', serif;
+    font-size: 56px;
+    font-weight: 300;
+    line-height: 1;
+    color: var(--accent);
+    letter-spacing: -0.03em;
+  }
+
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(245, 241, 234, 0.7);
+    margin-top: 6px;
+  }
+
+  /* === PROBLEMA / SOLUCION === */
+  .before-after-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 40px;
+  }
+
+  @media (max-width: 720px) {
+    .before-after-grid { grid-template-columns: 1fr; }
+  }
+
+  .ba-card {
+    background: var(--paper-warm);
+    padding: 32px;
+    border-radius: 2px;
+    border-left: 3px solid;
+  }
+
+  .ba-card.before { border-color: var(--red); }
+  .ba-card.after { border-color: var(--green); background: #e8efe4; }
+
+  .ba-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+
+  .ba-card.before .ba-label { color: var(--red); }
+  .ba-card.after .ba-label { color: var(--green); }
+
+  .ba-card h4 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 19px;
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+  }
+
+  .ba-card p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  /* === FASES === */
+  #manual { background: var(--ink); color: var(--paper); padding: 140px 40px; max-width: none; margin: 0; }
+  #manual .inner { max-width: 1200px; margin: 0 auto; }
+  #manual .section-number { color: var(--accent); }
+  #manual .lead { color: rgba(245, 241, 234, 0.85); }
+
+  .fase-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    margin-top: 60px;
+  }
+
+  @media (max-width: 900px) {
+    .fase-grid { grid-template-columns: 1fr; }
+  }
+
+  .fase-card {
+    background: rgba(245, 241, 234, 0.04);
+    border: 0.5px solid rgba(245, 241, 234, 0.15);
+    border-radius: 2px;
+    padding: 36px 32px;
+    position: relative;
+    transition: all 0.3s;
+  }
+
+  .fase-card:hover {
+    background: rgba(245, 241, 234, 0.07);
+    transform: translateY(-2px);
+  }
+
+  .fase-num {
+    font-family: 'Fraunces', serif;
+    font-size: 72px;
+    font-weight: 300;
+    color: var(--accent);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    margin-bottom: 20px;
+  }
+
+  .fase-card h3 { color: var(--paper); margin-bottom: 14px; }
+  .fase-card p { color: rgba(245, 241, 234, 0.7); font-size: 14px; line-height: 1.65; }
+
+  .fase-detail {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 0.5px solid rgba(245, 241, 234, 0.1);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(245, 241, 234, 0.55);
+    line-height: 1.7;
+  }
+
+  /* === MANUAL POR PLATAFORMA === */
+  .plataforma-list {
+    display: grid;
+    gap: 1px;
+    background: var(--line);
+    border: 0.5px solid var(--line);
+  }
+
+  .plataforma-item {
+    background: var(--paper);
+    padding: 36px 40px;
+    display: grid;
+    grid-template-columns: 180px 1fr auto;
+    gap: 40px;
+    align-items: center;
+    transition: background 0.2s;
+  }
+
+  .plataforma-item:hover { background: var(--paper-warm); }
+
+  @media (max-width: 900px) {
+    .plataforma-item { grid-template-columns: 1fr; gap: 16px; padding: 28px 24px; }
+  }
+
+  .plat-name {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .plat-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--green);
+    flex-shrink: 0;
+  }
+
+  .plat-dot.partial { background: var(--amber); }
+  .plat-dot.no { background: var(--red); }
+
+  .plat-steps {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .plat-steps strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .plat-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+    border: 0.5px solid var(--line-strong);
+    color: var(--muted);
+  }
+
+  .plat-badge.recommended {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+
+  /* === PROMPT BOX === */
+  #el-prompt {
+    background: var(--paper-warm);
+    padding: 120px 40px;
+    max-width: none;
+    margin: 0;
+  }
+
+  #el-prompt .inner { max-width: 1200px; margin: 0 auto; }
+
+  .prompt-container {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 40px;
+    box-shadow: 0 24px 60px -20px rgba(15, 14, 12, 0.4);
+  }
+
+  .prompt-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 28px;
+    border-bottom: 0.5px solid rgba(245, 241, 234, 0.1);
+    background: rgba(0,0,0,0.2);
+  }
+
+  .prompt-tabs {
+    display: flex;
+    gap: 4px;
+  }
+
+  .prompt-tab {
+    background: transparent;
+    border: 0.5px solid rgba(245, 241, 234, 0.15);
+    color: rgba(245, 241, 234, 0.6);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    padding: 8px 16px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+
+  .prompt-tab:hover { color: var(--paper); border-color: rgba(245, 241, 234, 0.3); }
+  .prompt-tab.active { background: var(--accent); color: var(--paper); border-color: var(--accent); }
+
+  .copy-btn {
+    background: transparent;
+    border: 0.5px solid rgba(245, 241, 234, 0.25);
+    color: var(--paper);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    padding: 8px 18px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+
+  .copy-btn:hover { background: var(--accent); border-color: var(--accent); }
+  .copy-btn.copied { background: var(--green); border-color: var(--green); }
+
+  .prompt-body {
+    padding: 32px 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.75;
+    color: rgba(245, 241, 234, 0.9);
+    max-height: 520px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+  }
+
+  .prompt-body::-webkit-scrollbar { width: 8px; }
+  .prompt-body::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+  .prompt-body::-webkit-scrollbar-thumb { background: rgba(245, 241, 234, 0.2); border-radius: 4px; }
+
+  /* === FAQ === */
+  .faq-item {
+    border-bottom: 0.5px solid var(--line);
+    padding: 28px 0;
+    cursor: pointer;
+  }
+
+  .faq-item:first-child { padding-top: 0; }
+
+  .faq-q {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    font-family: 'Fraunces', serif;
+    font-size: 21px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+
+  .faq-toggle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    font-weight: 300;
+    color: var(--accent);
+    transition: transform 0.3s;
+    flex-shrink: 0;
+  }
+
+  .faq-item.open .faq-toggle { transform: rotate(45deg); }
+
+  .faq-a {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, margin 0.35s ease;
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .faq-item.open .faq-a {
+    max-height: 400px;
+    margin-top: 16px;
+  }
+
+  /* === HOSTING OPTIONS === */
+  .hosting-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 40px;
+  }
+
+  @media (max-width: 900px) {
+    .hosting-grid { grid-template-columns: 1fr; }
+  }
+
+  .hosting-card {
+    background: var(--paper-warm);
+    padding: 28px;
+    border-radius: 2px;
+    border-top: 3px solid var(--accent);
+  }
+
+  .hosting-card h4 {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .hosting-card .hosting-url {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .hosting-card p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* === FOOTER === */
+  footer {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 80px 40px 40px;
+    margin-top: 0;
+  }
+
+  .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .footer-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    margin-bottom: 48px;
+    max-width: 800px;
+  }
+
+  .footer-title em { color: var(--accent); font-style: italic; }
+
+  .footer-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 32px;
+    border-top: 0.5px solid rgba(245, 241, 234, 0.15);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(245, 241, 234, 0.55);
+  }
+
+  @media (max-width: 720px) {
+    .footer-meta { flex-direction: column; gap: 16px; align-items: flex-start; }
+  }
+
+  /* === ANIMATIONS === */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s, transform 0.8s;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <span class="logo-mark"></span>
+    <span>Zuma · Radar</span>
+  </div>
+  <div class="nav-links">
+    <a href="#que-es">Qué es</a>
+    <a href="#manual">Manual</a>
+    <a href="#plataformas">Plataformas</a>
+    <a href="#el-prompt">Prompt</a>
+    <a href="#faq">FAQ</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="eyebrow">Proyecto Zuma Sport · v7.0</div>
+  <h1 class="hero-title">
+    Un radar de <em>tendencias</em> deportivas<br>
+    para distribuidores que <strong>no quieren adivinar.</strong>
+  </h1>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      Base metodológica
+      <strong>Google Trends + NSE A/B/C</strong>
+    </div>
+    <div class="hero-meta-item">
+      Output garantizado
+      <strong>12 tendencias estructuradas</strong>
+    </div>
+    <div class="hero-meta-item">
+      Compatibilidad
+      <strong>Claude · GPT · Gemini · Perplexity</strong>
+    </div>
+    <div class="hero-meta-item">
+      Veredicto
+      <strong>🟢 Sí pega · 🟡 Observar · 🔴 No pega</strong>
+    </div>
+  </div>
+  <div class="scroll-indicator">Scroll para explorar</div>
+</section>
+
+<!-- QUE ES -->
+<section id="que-es">
+  <div class="section-number">01 — Contexto del proyecto</div>
+  <h2>Un <em>prompt maestro</em> diseñado para dar la misma calidad en cualquier IA.</h2>
+
+  <div class="content-grid">
+    <div>
+      <p class="lead">Zuma Sport necesitaba identificar qué productos, marcas y categorías están pegando en el mercado peruano antes de decidir qué representar, empujar o descontinuar.</p>
+      <p style="color: var(--muted); font-size: 16px;">El problema no era la falta de información, era la inconsistencia. Cada IA interpretaba "dame tendencias deportivas" de forma distinta. GPT daba listas genéricas. Gemini se iba por narrativa. Claude analizaba en profundidad. Imposible comparar o confiar.</p>
+      <p style="color: var(--muted); font-size: 16px;">Este prompt resuelve esa variabilidad. Obliga a cualquier LLM a seguir una estructura idéntica —4 deportes, 3 segmentos por deporte, 12 tendencias exactas— y a anclar cada una a productos específicos del catálogo real de Zuma descubierto dinámicamente.</p>
+    </div>
+
+    <div class="stat-block">
+      <div class="stat-item">
+        <div class="stat-number">12</div>
+        <div class="stat-label">Tendencias exactas por ejecución</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">4</div>
+        <div class="stat-label">Consultas Google Trends por tendencia</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">3</div>
+        <div class="stat-label">Fases secuenciales de ejecución</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">0</div>
+        <div class="stat-label">Marcas hardcodeadas en el prompt</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EVOLUCION -->
+<section>
+  <div class="section-number">02 — Qué resolvimos</div>
+  <h2>De respuestas inconsistentes a <em>outputs comparables</em>.</h2>
+
+  <div class="before-after-grid">
+    <div class="ba-card before">
+      <div class="ba-label">— Antes</div>
+      <h4>Categorías genéricas</h4>
+      <p>"Lentes de natación antivaho", "balones de entrenamiento", "canilleras premium". Útil para un blog, inútil para decidir inventario.</p>
+    </div>
+    <div class="ba-card after">
+      <div class="ba-label">+ Ahora</div>
+      <h4>Productos específicos del catálogo</h4>
+      <p>"Spalding TF-250", "Arena Cobra Ultra Swipe", "Opro Platinum". Cada tendencia ancla un SKU real para acción de compras.</p>
+    </div>
+
+    <div class="ba-card before">
+      <div class="ba-label">— Antes</div>
+      <h4>Marcas inventadas o desactualizadas</h4>
+      <p>La IA recordaba marcas de hace 2 años o inventaba líneas. Sin forma de verificar qué distribuye Zuma ahora.</p>
+    </div>
+    <div class="ba-card after">
+      <div class="ba-label">+ Ahora</div>
+      <h4>Descubrimiento dinámico del catálogo</h4>
+      <p>Fase 0 obligatoria: la IA consulta Ripley, Juntoz, Linio antes de analizar. Catálogo siempre actualizado sin tocar el prompt.</p>
+    </div>
+
+    <div class="ba-card before">
+      <div class="ba-label">— Antes</div>
+      <h4>Sin evidencia cuantitativa</h4>
+      <p>"Esta tendencia está creciendo" sin datos. ¿Cuánto? ¿Dónde? ¿Comparado con qué? Nadie sabía.</p>
+    </div>
+    <div class="ba-card after">
+      <div class="ba-label">+ Ahora</div>
+      <h4>Google Trends con 4 consultas fijas</h4>
+      <p>Interés temporal + comparación + geografía + breakout queries. URLs explícitas. Mismo método en todos los modelos.</p>
+    </div>
+
+    <div class="ba-card before">
+      <div class="ba-label">— Antes</div>
+      <h4>Recomendaciones sin semáforo</h4>
+      <p>Toda tendencia parecía una oportunidad. ¿Cuál priorizar? ¿Cuál descartar? Imposible accionar.</p>
+    </div>
+    <div class="ba-card after">
+      <div class="ba-label">+ Ahora</div>
+      <h4>Veredicto 🟢 🟡 🔴 obligatorio</h4>
+      <p>+50% crecimiento pega. +10-49% observar. Estancado no pega. Umbrales cuantitativos. Cero ambigüedad.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MANUAL - FASES -->
+<section id="manual">
+  <div class="inner">
+    <div class="section-number">03 — Manual de uso</div>
+    <h2>Cómo el prompt <em>se ejecuta</em> en cualquier modelo.</h2>
+    <p class="lead">El prompt trabaja en 3 fases secuenciales. Cada fase produce un output antes de pasar a la siguiente. Esto garantiza que ningún LLM salte pasos o mezcle contextos.</p>
+
+    <div class="fase-grid">
+      <div class="fase-card">
+        <div class="fase-num">0</div>
+        <h3>Descubrir catálogo</h3>
+        <p>La IA consulta las tiendas oficiales de Zuma antes de empezar. Extrae marcas, líneas y rangos de precio que Zuma realmente distribuye hoy.</p>
+        <div class="fase-detail">
+          → Ripley Zuma Sport<br>
+          → Juntoz Zuma Sport<br>
+          → Linio Zuma Sport<br>
+          → CMR Zuma Sport<br><br>
+          Output: tabla resumen del catálogo
+        </div>
+      </div>
+
+      <div class="fase-card">
+        <div class="fase-num">1</div>
+        <h3>Investigar Trends</h3>
+        <p>Para cada tendencia la IA ejecuta 4 consultas a Google Trends con URLs explícitas y parámetros fijos. Datos cuantitativos reales, no intuición.</p>
+        <div class="fase-detail">
+          Q1 → Interés temporal 12m<br>
+          Q2 → vs competidor directo<br>
+          Q3 → Geografía por departamento<br>
+          Q4 → Queries en aumento<br><br>
+          Parámetro geo=PE · date=today%2012-m
+        </div>
+      </div>
+
+      <div class="fase-card">
+        <div class="fase-num">2</div>
+        <h3>Generar 12 tendencias</h3>
+        <p>Estructura fija: 4 deportes × 3 segmentos NSE. Cada tendencia con veredicto semáforo, acción comercial, canal y urgencia.</p>
+        <div class="fase-detail">
+          1 Natación · 2 Fútbol<br>
+          3 Running · 4 Básquet<br><br>
+          T1=NSE A · T2=NSE B · T3=NSE C<br>
+          Checkpoint obligatorio por deporte
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLATAFORMAS -->
+<section id="plataformas">
+  <div class="section-number">04 — Cómo ejecutarlo</div>
+  <h2>Activar <em>búsqueda web</em> es clave.</h2>
+  <p class="lead">El prompt funciona en cualquier LLM moderno, pero requiere acceso web para descubrir el catálogo de Zuma y consultar Google Trends en tiempo real. Esta es la guía específica por plataforma.</p>
+
+  <div style="background: var(--ink); color: var(--paper); padding: 36px 40px; border-radius: 2px; margin-bottom: 40px; display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: center;">
+    <div style="font-family: 'Fraunces', serif; font-size: 56px; line-height: 1; color: var(--accent); font-weight: 300;">★</div>
+    <div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px;">Mejora crítica</div>
+      <h3 style="color: var(--paper); margin-bottom: 10px; font-size: 22px;">Activa "Deep Research" cuando esté disponible</h3>
+      <p style="color: rgba(245, 241, 234, 0.75); font-size: 14px; line-height: 1.65; margin: 0;">Gemini, ChatGPT Plus y Claude ofrecen modos de investigación profunda. Activarlo multiplica la precisión del análisis de Google Trends y la profundidad del descubrimiento del catálogo. Toma 5-10 minutos en lugar de 1-2, pero produce datos comparables con un informe de consultora.</p>
+    </div>
+  </div>
+
+  <div class="plataforma-list">
+
+    <div class="plataforma-item">
+      <div class="plat-name"><span class="plat-dot"></span>Claude</div>
+      <div class="plat-steps">
+        <strong>1.</strong> Abre una conversación nueva en <em>claude.ai</em>.<br>
+        <strong>2.</strong> Activa el botón de <strong>búsqueda web</strong> (ícono de globo en la barra inferior). Para análisis más profundo, activa también <strong>"Research"</strong> si está disponible en tu plan.<br>
+        <strong>3.</strong> Pega el prompt completo. Claude ejecutará Fase 0 descubriendo el catálogo y luego procederá.<br>
+        <strong>4.</strong> Espera 1-3 minutos con búsqueda simple, o 5-10 minutos con Research. Claude mostrará sus búsquedas en tiempo real.
+      </div>
+      <div class="plat-badge recommended">Recomendado</div>
+    </div>
+
+    <div class="plataforma-item">
+      <div class="plat-name"><span class="plat-dot"></span>ChatGPT / GPT-4o</div>
+      <div class="plat-steps">
+        <strong>1.</strong> Usa <em>ChatGPT Plus</em> con modelo GPT-4o o superior (la versión free tiene acceso web limitado).<br>
+        <strong>2.</strong> Activa <strong>"Deep Research"</strong> si está en tu plan (botón en la barra de entrada). Alternativamente asegúrate de que <strong>Browse</strong> esté activo.<br>
+        <strong>3.</strong> Pega el prompt. Con Deep Research toma 5-10 minutos pero el output es mucho más preciso.<br>
+        <strong>4.</strong> Si GPT se detiene en T6 o T9 (sin Deep Research), escribe <em>"continúa"</em> y seguirá.
+      </div>
+      <div class="plat-badge recommended">Recomendado</div>
+    </div>
+
+    <div class="plataforma-item">
+      <div class="plat-name"><span class="plat-dot"></span>Gemini</div>
+      <div class="plat-steps">
+        <strong>1.</strong> Abre <em>gemini.google.com</em>.<br>
+        <strong>2.</strong> <strong>Activa "Deep Research"</strong> (botón azul con ícono de lupa en la barra de entrada). Este paso es crítico — sin Deep Research el análisis de Trends pierde profundidad.<br>
+        <strong>3.</strong> Pega el prompt. Gemini generará primero un plan de investigación que debes aprobar antes de ejecutar.<br>
+        <strong>4.</strong> La ejecución toma 5-10 minutos pero produce el output más preciso. Las citas [1][2] al final son fuentes verificadas, no ruido.
+      </div>
+      <div class="plat-badge recommended">Recomendado · Deep Research</div>
+    </div>
+
+    <div class="plataforma-item">
+      <div class="plat-name"><span class="plat-dot"></span>Perplexity</div>
+      <div class="plat-steps">
+        <strong>1.</strong> Perplexity es una IA de búsqueda — acceso web está siempre activo.<br>
+        <strong>2.</strong> Usa el modo <em>Pro</em> si lo tienes (mejor precisión con Trends).<br>
+        <strong>3.</strong> Pega el prompt. Perplexity citará automáticamente las fuentes de cada consulta.<br>
+        <strong>4.</strong> Es el modelo más preciso para datos cuantitativos actuales.
+      </div>
+      <div class="plat-badge">Opción fuerte</div>
+    </div>
+
+    <div class="plataforma-item">
+      <div class="plat-name"><span class="plat-dot partial"></span>Copilot (Microsoft)</div>
+      <div class="plat-steps">
+        <strong>1.</strong> Usa <em>copilot.microsoft.com</em> o la app integrada en Edge.<br>
+        <strong>2.</strong> Búsqueda web activa por defecto (Bing).<br>
+        <strong>3.</strong> Funciona con el prompt compacto o balanceado (el completo puede exceder su contexto).<br>
+        <strong>4.</strong> Si se corta, pide continuar con el checkpoint del último deporte.
+      </div>
+      <div class="plat-badge">Usa versión balanceada</div>
+    </div>
+
+    <div class="plataforma-item">
+      <div class="plat-name"><span class="plat-dot no"></span>Modelos sin web (Llama, Mistral, GPT-3.5)</div>
+      <div class="plat-steps">
+        <strong>1.</strong> Sin acceso web, el Plan B del prompt se activa automáticamente.<br>
+        <strong>2.</strong> La IA preguntará por el catálogo de Zuma. Copia y pega las marcas que Zuma distribuye como respuesta.<br>
+        <strong>3.</strong> Los datos de Trends serán declarados como <em>"Estimado por conocimiento"</em>.<br>
+        <strong>4.</strong> Útil para brainstorm, no para decisiones de inventario.
+      </div>
+      <div class="plat-badge">Solo para brainstorm</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- EL PROMPT -->
+<section id="el-prompt">
+  <div class="inner">
+    <div class="section-number">05 — El prompt</div>
+    <h2>Copia, pega y <em>ejecuta</em>.</h2>
+    <p class="lead">Tres versiones optimizadas según el límite de contexto de cada modelo. El completo para modelos premium, el balanceado para uso general, el compacto para APIs limitadas o automatizaciones.</p>
+
+    <div class="prompt-container">
+      <div class="prompt-header">
+        <div class="prompt-tabs">
+          <button class="prompt-tab active" data-tab="full">Completo · 6.2K</button>
+          <button class="prompt-tab" data-tab="medium">Balanceado · 3.2K</button>
+          <button class="prompt-tab" data-tab="mini">Compacto · 1.5K</button>
+        </div>
+        <button class="copy-btn" id="copy-btn" onclick="copyPrompt()">Copiar</button>
+      </div>
+      <pre class="prompt-body" id="prompt-display"></pre>
+    </div>
+
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="section-number">06 — Preguntas frecuentes</div>
+  <h2>Dudas <em>habituales</em>.</h2>
+
+  <div class="faq-list">
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">
+        <span>¿Por qué las respuestas de GPT y Gemini se ven distintas aunque uso el mismo prompt?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        La estructura debe ser idéntica (mismo orden de deportes, mismos segmentos, mismo schema). Lo que varía es el estilo narrativo y los datos cuantitativos según la calidad de búsqueda del modelo. GPT tiende a ser más sintético, Gemini más detallado con citas. Si la estructura varía, verifica que pegaste el prompt completo y que activaste búsqueda web.
+      </div>
+    </div>
+
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">
+        <span>¿El prompt funciona en español y en inglés?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        Está optimizado para español porque el mercado objetivo es Perú y los términos de búsqueda en Google Trends funcionan mejor en español para productos locales. Si necesitas una versión en inglés para análisis de tendencias globales, los deportes y segmentos se adaptan pero los distritos y NSE son específicos a Lima.
+      </div>
+    </div>
+
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">
+        <span>¿Qué pasa si Zuma Sport agrega o cambia marcas en su catálogo?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        El prompt se actualiza solo. No hay marcas hardcodeadas. La Fase 0 consulta las tiendas oficiales de Zuma cada vez que ejecutas el prompt, así que si mañana Zuma toma representación de una marca nueva, la próxima ejecución la detectará automáticamente y la incluirá en las tendencias.
+      </div>
+    </div>
+
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">
+        <span>¿Cada cuánto debería ejecutar el prompt?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        Mensualmente es el ritmo ideal. Google Trends actualiza datos cada 24-48 horas y las tendencias de retail deportivo tienen estacionalidad mensual. Ejecuta el primer lunes de cada mes y compara contra el mes anterior para detectar aceleraciones y desaceleraciones. Para campañas puntuales (Cyber Wow, Fiestas Patrias, Navidad) ejecuta una ronda específica 4-6 semanas antes.
+      </div>
+    </div>
+
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">
+        <span>¿Puedo modificar los 4 deportes analizados?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        Sí, pero con criterio. Los 4 actuales (Natación, Fútbol, Running, Básquet) cubren las marcas ancla del catálogo Zuma: Arena/Speedo, Gilbert/Opro, potencial representación, y Spalding. Si cambias a deportes sin marca correspondiente en el catálogo, el prompt generará muchas "POTENCIAL REPRESENTACIÓN" y perderá utilidad comercial inmediata (aunque gana como radar de expansión).
+      </div>
+    </div>
+
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">
+        <span>¿Qué hago cuando GPT se corta antes de terminar las 12 tendencias?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        Escribe "continúa desde [N/12] manteniendo el schema". El prompt tiene contadores [X/12] y checkpoints ✓ por deporte justamente para facilitar la retomada. GPT-4o raramente se corta, pero GPT-3.5 y Copilot sí tienen este límite. Para esos modelos usa la versión balanceada o compacta del prompt.
+      </div>
+    </div>
+
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">
+        <span>¿Los datos de Google Trends son precisos al 100%?</span>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        Son indicadores de interés relativo, no de ventas absolutas. Google Trends muestra búsquedas, no transacciones. Sirven para detectar dirección y estacionalidad con precisión alta. Para validar volumen real, cruza con datos internos de Zuma (sell-in a canal, sell-out de marketplaces) antes de asignar inventario significativo.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOSTING -->
+<section>
+  <div class="section-number">07 — Cómo publicar esta web</div>
+  <h2>Tres opciones <em>gratis</em> para poner este sitio online.</h2>
+  <p class="lead">Esta página es un archivo HTML autocontenido. Puedes subirlo a cualquier servicio de hosting estático en menos de 5 minutos. Todas las opciones abajo son gratuitas para sitios pequeños como este.</p>
+
+  <div class="hosting-grid">
+    <div class="hosting-card">
+      <h4>Vercel</h4>
+      <span class="hosting-url">vercel.com</span>
+      <p>La opción más sencilla. Arrastra el archivo HTML a vercel.com, obtiene una URL instantánea tipo zuma-sport.vercel.app. Permite dominios propios después.</p>
+    </div>
+    <div class="hosting-card">
+      <h4>Netlify</h4>
+      <span class="hosting-url">app.netlify.com/drop</span>
+      <p>Netlify Drop: solo arrastras el archivo HTML a su web y listo. URL inmediata tipo zuma-sport.netlify.app. Cero configuración.</p>
+    </div>
+    <div class="hosting-card">
+      <h4>GitHub Pages</h4>
+      <span class="hosting-url">pages.github.com</span>
+      <p>Ideal si Zuma ya usa GitHub. Creas un repo público, subes el HTML como <code>index.html</code>, activas Pages y tu sitio queda en zuma.github.io/radar.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-title">El mejor inventario no es el más grande, <em>es el que mejor lee al mercado.</em></div>
+    <div class="footer-meta">
+      <div>Prompt v7.0 · Abril 2026</div>
+      <div>Zuma Sport · Radar de Tendencias</div>
+      <div>Construido para durar</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const prompts = {
+  full: `## IDENTIDAD
+Eres un analista senior de tendencias deportivas y marketing para ZUMA SPORT, distribuidor y representante oficial en Perú de marcas deportivas globales. Tu misión es detectar qué productos específicos del catálogo Zuma "pegan" o "no pegan" en el mercado peruano, usando Google Trends como evidencia cuantitativa.
+
+## PERFIL DE LA EMPRESA
+Zuma Sport representa y distribuye marcas globales en deportes, vida saludable y outdoor.
+Canales de venta: (1) Mayorista, (2) Retail (Ripley, Linio, Juntoz, CMR), (3) Corporativo, (4) Institucional (colegios, clubes, universidades, municipios).
+
+## FLUJO DE EJECUCIÓN — 3 FASES SECUENCIALES
+
+### FASE 0 — DESCUBRIR EL CATÁLOGO REAL DE ZUMA (antes de analizar tendencias)
+Debes descubrir las marcas y líneas que Zuma distribuye actualmente antes de continuar. Usa el siguiente orden de opciones:
+
+Opción A — Con búsqueda web disponible:
+Consulta las tiendas oficiales de Zuma Sport y extrae marcas + líneas de producto específicas:
+· https://simple.ripley.com.pe/tienda/zuma-sport-2358
+· https://zumasport.juntoz.com
+· https://www.linio.com.pe/s/zuma-sport
+· https://tienda.cmrpuntos.pe/s/zuma-sport
+Resume hallazgos en una tabla breve con: Marca | Deporte/Categoría | Líneas o modelos detectados | Rango de precios observado.
+
+Opción B — Sin búsqueda web:
+Pregunta al usuario: "No tengo acceso web para consultar el catálogo actual. ¿Puedes compartir las marcas y líneas que Zuma distribuye? Si no, procedo con conocimiento general declarado como inferido."
+Espera respuesta del usuario. Si el usuario pide proceder sin catálogo, declara explícitamente "CATÁLOGO INFERIDO — no verificado" y continúa con tu mejor conocimiento, aclarando en cada tendencia que la marca es inferida.
+
+Al terminar Fase 0, escribe:
+> CATÁLOGO DETECTADO: [Verificado vía web / Provisto por usuario / Inferido sin verificación]
+> [tabla resumen: marca · deporte · líneas detectadas · rango precio]
+
+### FASE 1 — INVESTIGAR TENDENCIAS CON GOOGLE TRENDS
+Para cada una de las 12 tendencias que generarás en Fase 2, ejecuta 4 consultas:
+
+Q1 INTERÉS TEMPORAL (12 meses Perú):
+https://trends.google.com/trends/explore?date=today%2012-m&geo=PE&q=[TÉRMINO]
+→ Reporta valor inicial→actual, % crecimiento, picos.
+
+Q2 COMPARACIÓN con competidor directo:
+https://trends.google.com/trends/explore?date=today%2012-m&geo=PE&q=[LÍNEA_ZUMA],[COMPETIDOR]
+→ Reporta líder actual, último cruce.
+
+Q3 GEOGRAFÍA por departamento Perú:
+Misma URL Q1 → sección "Interés por subregión" región Perú → top 5 regiones.
+
+Q4 CONSULTAS RELACIONADAS:
+Misma URL Q1 → "Consultas relacionadas" filtro "En aumento" → top 3 + breakout.
+
+Plan B sin web: declarar "Estimado", usar direcciones cualitativas (sube/estable/baja), nunca inventar %.
+
+### FASE 2 — GENERAR LAS 12 TENDENCIAS
+Primera línea de esta fase:
+> PERIODO ANALIZADO: [Mes Año] — FUENTE: [Google Trends verificado / Estimado]
+
+Estructura fija: 4 deportes × 3 segmentos = 12 tendencias.
+
+## ESTRUCTURA FIJA
+Orden de deportes: 1.Natación → 2.Fútbol → 3.Running → 4.Básquet
+
+## SEGMENTOS FIJOS POR NÚMERO DE TENDENCIA
+T-1 → NSE A · Ambos · 20-30 años · Miraflores, San Isidro, San Borja, Surco, La Molina · Ticket S/300-800+ · Canal: Retail premium + Corporativo
+T-2 → NSE B · Ambos · 20-30 años · San Miguel, Jesús María, Magdalena, Los Olivos, Surquillo · Ticket S/120-300 · Canal: Retail + Mayorista
+T-3 → NSE C · Ambos · 20-30 años · SJL, Comas, Ate, VES, Carabayllo, La Victoria · Ticket S/40-120 · Canal: Retail popular + Institucional
+
+## SEMÁFORO
+🟢 SÍ PEGA: +50% en Q1 o breakout en Q4 + demanda local + línea del catálogo disponible
+🟡 OBSERVAR: +10-49% + demanda parcial + requiere piloto o representación nueva
+🔴 NO PEGA: Estancado/cayendo + sin volumen + descontinuar o evitar stock
+
+## REGLAS CRÍTICAS DE CONTENIDO
+R1. CATEGORÍA/PRODUCTO debe citar una línea específica del catálogo descubierto en Fase 0. Si ese catálogo no cubre el deporte analizado, usar "POTENCIAL REPRESENTACIÓN: [marca+modelo sugerido]" y justificar.
+R2. Prohibido categorías genéricas ("lentes de natación", "balones de básquet", "protectores bucales", "canilleras") en CATEGORÍA/PRODUCTO. Debe haber marca + modelo o propuesta de representación.
+R3. MARCA(S) RELEVANTE(S) debe indicar: "Catálogo Zuma verificado" / "Catálogo inferido" / "Potencial representación".
+R4. EVIDENCIA TRENDS debe buscar el nombre específico del producto, no la categoría genérica.
+R5. Si el catálogo fue inferido (sin verificar), añadir "⚠ marca sugerida no verificada" en MARCA(S) RELEVANTE(S).
+
+## REGLAS DE COMPLETITUD
+R6. Contador [X/12] al inicio de cada bloque de tendencia.
+R7. Checkpoint al terminar cada deporte: ✓ [DEPORTE] completo: T1·NSE A — T2·NSE B — T3·NSE C
+R8. No avanzar al siguiente deporte sin escribir el checkpoint.
+
+## PROHIBIDO
+✗ Saltar Fase 0 y empezar directo con tendencias · ✗ inventar marcas sin declararlas como inferidas · ✗ categorías genéricas · ✗ inventar % de Trends sin acceso web · ✗ conclusión después de 12/12
+
+## SCHEMA DE LA FASE 2 — repetir exacto por cada tendencia
+[X/12]
+---
+DEPORTE: [Natación / Fútbol / Running / Básquet]
+TENDENCIA N°[1/2/3] — SEGMENTO [A/B/C]:
+VEREDICTO: 🟢 SÍ PEGA / 🟡 OBSERVAR / 🔴 NO PEGA
+CATEGORÍA/PRODUCTO: [línea específica del catálogo o POTENCIAL REPRESENTACIÓN: marca+modelo]
+DESCRIPCIÓN: [qué ocurre en el mercado peruano + por qué importa para Zuma]
+EVIDENCIA TRENDS:
+ · Q1 Temporal: [término], Perú 12m, [inicial→actual], [%], [picos]
+ · Q2 Comparación: [línea Zuma] vs [competidor], líder [X], cruce [fecha]
+ · Q3 Geografía: top 5 regiones Perú
+ · Q4 Queries relacionadas: top 3, destacar breakout
+MARCA(S) RELEVANTE(S): [Catálogo Zuma verificado / Catálogo inferido / Potencial representación]
+PÚBLICO PRIMARIO: Ambos · 20-30 años · NSE [X] · [distritos del segmento] · [perfil]
+TICKET PROMEDIO: S/[rango del segmento]
+CANAL RECOMENDADO: [canal del segmento o combinación]
+ACCIÓN COMERCIAL: [nombre + mecánica ejecutable en 30-90 días, anclada a la línea específica]
+RIESGO PRINCIPAL: [qué puede fallar]
+URGENCIA: [Inmediata / Próximos 3 meses / Planificación futura]
+FUENTE: [Google Trends verificado / Estimado]
+---
+✓ [DEPORTE] completo: T1·NSE A — T2·NSE B — T3·NSE C
+
+## EJECUCIÓN
+Inicia en FASE 0. No escribas "PERIODO ANALIZADO" hasta haber completado el descubrimiento del catálogo. Si necesitas input del usuario, detente y pregunta antes de inventar.`,
+
+  medium: `## IDENTIDAD
+Analista senior para ZUMA SPORT (distribuidor de marcas deportivas globales en Perú). Canales: Mayorista · Retail (Ripley, Linio, Juntoz, CMR) · Corporativo · Institucional.
+
+## FLUJO EN 3 FASES
+
+### FASE 0 — DESCUBRIR CATÁLOGO ZUMA (obligatorio antes de tendencias)
+Opción A con web: consulta tiendas oficiales y extrae marcas + líneas:
+· https://simple.ripley.com.pe/tienda/zuma-sport-2358
+· https://zumasport.juntoz.com
+· https://www.linio.com.pe/s/zuma-sport
+Opción B sin web: pregunta al usuario por el catálogo. Si no responde o pide proceder, declara "CATÁLOGO INFERIDO" y usa tu conocimiento general.
+
+Al terminar Fase 0 escribe:
+> CATÁLOGO DETECTADO: [Verificado / Provisto por usuario / Inferido]
+> Tabla: marca · deporte · líneas · rango precio
+
+### FASE 1 — GOOGLE TRENDS (4 consultas por tendencia)
+Q1 Temporal: https://trends.google.com/trends/explore?date=today%2012-m&geo=PE&q=[LÍNEA] → % crecimiento
+Q2 Comparación: q=[LÍNEA_ZUMA],[COMPETIDOR] → líder + cruce
+Q3 Geografía: sección "Interés por subregión" Perú → top 5
+Q4 Queries "En aumento" → top 3 + breakout
+Plan B sin web: declarar "Estimado", direcciones cualitativas, nunca inventar %.
+
+### FASE 2 — GENERAR TENDENCIAS
+Primera línea: > PERIODO ANALIZADO: [Mes Año] — FUENTE: [Google Trends / Estimado]
+
+## ESTRUCTURA FIJA: 4 DEPORTES × 3 SEGMENTOS = 12 TENDENCIAS
+Orden: 1.Natación → 2.Fútbol → 3.Running → 4.Básquet
+
+## SEGMENTOS FIJOS POR NÚMERO
+T-1 → NSE A · Ambos · 20-30 · Miraflores/San Isidro/San Borja/Surco · S/300-800+ · Canal: Retail premium + Corporativo
+T-2 → NSE B · Ambos · 20-30 · San Miguel/Jesús María/Los Olivos · S/120-300 · Canal: Retail + Mayorista
+T-3 → NSE C · Ambos · 20-30 · SJL/Comas/Ate/VES · S/40-120 · Canal: Retail popular + Institucional
+
+## SEMÁFORO
+🟢 SÍ PEGA: +50% + demanda + línea Zuma disponible
+🟡 OBSERVAR: +10-49% + piloto o nueva representación
+🔴 NO PEGA: estancado/sin demanda
+
+## REGLAS CRÍTICAS
+R1. CATEGORÍA/PRODUCTO cita línea específica del catálogo descubierto, O "POTENCIAL REPRESENTACIÓN: [marca+modelo]" si el deporte no está cubierto.
+R2. Prohibido categorías genéricas sin marca ("lentes natación", "balones básquet").
+R3. MARCA(S) indica "Catálogo Zuma verificado / Inferido / Potencial representación".
+R4. Si catálogo inferido: añadir "⚠ no verificado" en MARCA(S).
+R5. Contador [X/12]. Checkpoint por deporte: ✓ [DEPORTE]: T1·NSE A — T2·NSE B — T3·NSE C. No avanzar sin checkpoint.
+
+PROHIBIDO: saltar Fase 0, inventar marcas sin declarar, categorías genéricas, inventar % sin web.
+
+## SCHEMA
+[X/12]
+---
+DEPORTE: | TENDENCIA N°[1/2/3] — SEG.[A/B/C]: | VEREDICTO: 🟢/🟡/🔴 | CATEGORÍA/PRODUCTO: [línea del catálogo o POTENCIAL REPRESENTACIÓN] | DESCRIPCIÓN: [qué ocurre + por qué importa Zuma] | EVIDENCIA TRENDS: Q1 [%] · Q2 [vs competidor] · Q3 [top regiones] · Q4 [breakout] | MARCA(S): [Catálogo verificado/Inferido/Potencial] | PÚBLICO: Ambos · 20-30 · NSE[X] · distritos · perfil | TICKET: S/[rango] | CANAL: [del segmento] | ACCIÓN COMERCIAL: [nombre + mecánica 30-90d anclada a línea] | RIESGO: | URGENCIA: | FUENTE: [Trends/Estimado]
+---
+✓ [DEPORTE]: T1·NSE A — T2·NSE B — T3·NSE C
+
+## EJECUCIÓN
+Inicia en FASE 0. Si necesitas input del usuario para el catálogo, detente y pregunta. No inventes sin declararlo.`,
+
+  mini: `Analista Zuma Sport (distribuidor Perú). Canales: Mayorista/Retail/Corporativo/Institucional.
+
+FLUJO EN 3 FASES:
+
+FASE 0 - DESCUBRIR CATÁLOGO ZUMA (obligatorio):
+· Con web: consulta simple.ripley.com.pe/tienda/zuma-sport-2358, zumasport.juntoz.com, linio.com.pe/s/zuma-sport. Extrae marcas + líneas + precios.
+· Sin web: pregunta al usuario por catálogo. Si no responde, declara "CATÁLOGO INFERIDO".
+Al finalizar: "CATÁLOGO DETECTADO: [Verificado/Provisto/Inferido]" + tabla resumen.
+
+FASE 1 - GOOGLE TRENDS (4 consultas por tendencia):
+Q1 https://trends.google.com/trends/explore?date=today%2012-m&geo=PE&q=[LÍNEA] → %
+Q2 q=[LÍNEA],[COMPETIDOR] → líder + cruce
+Q3 Interés por subregión Perú → top 5
+Q4 Queries "En aumento" → top 3 + breakout
+Sin web: "Estimado" + dirección cualitativa, nunca inventar %.
+
+FASE 2 - GENERAR 12 TENDENCIAS:
+Primera línea: "PERIODO ANALIZADO: [Mes Año] — FUENTE: [Google Trends/Estimado]"
+
+ESTRUCTURA: 4 deportes × 3 segmentos.
+ORDEN: Natación → Fútbol → Running → Básquet
+
+SEGMENTOS POR NÚMERO:
+T-1=NSE A · Miraflores/San Isidro/San Borja/Surco · S/300-800+ · Retail premium+Corporativo
+T-2=NSE B · San Miguel/Jesús María/Los Olivos · S/120-300 · Retail+Mayorista
+T-3=NSE C · SJL/Comas/Ate/VES · S/40-120 · Retail popular+Institucional
+
+SEMÁFORO: 🟢+50% · 🟡+10-49% · 🔴estancado
+
+REGLAS: CATEGORÍA/PRODUCTO cita línea del catálogo descubierto O "POTENCIAL REPRESENTACIÓN: [marca+modelo]". Prohibido genéricos sin marca. MARCA(S) indica [Catálogo verificado/Inferido/Potencial]. Contador [X/12]. Checkpoint ✓[DEPORTE]:T1·A-T2·B-T3·C.
+
+SCHEMA:
+[X/12]
+---
+DEPORTE:|TENDENCIA N°[1/2/3]—SEG.[A/B/C]:|VEREDICTO:🟢/🟡/🔴|CATEGORÍA/PRODUCTO:[línea descubierta o POTENCIAL REP.]|DESCRIPCIÓN:|EVIDENCIA TRENDS:Q1·Q2·Q3·Q4|MARCA(S):[verificado/inferido/potencial]|PÚBLICO:|TICKET:|CANAL:|ACCIÓN:|RIESGO:|URGENCIA:|FUENTE:
+---
+✓[DEPORTE]:T1·A—T2·B—T3·C
+
+EMPIEZA EN FASE 0. Pregunta al usuario si no tienes web.`
+};
+
+let activeTab = 'full';
+
+function renderPrompt() {
+  document.getElementById('prompt-display').textContent = prompts[activeTab];
+}
+
+function copyPrompt() {
+  navigator.clipboard.writeText(prompts[activeTab]).then(() => {
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = '✓ Copiado';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'Copiar';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+document.querySelectorAll('.prompt-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.prompt-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    activeTab = tab.dataset.tab;
+    renderPrompt();
+  });
+});
+
+renderPrompt();
+
+// Fade-in on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('section').forEach(s => {
+  s.classList.add('fade-in');
+  observer.observe(s);
+});
+
+</script>
+
+</body>
+</html>
